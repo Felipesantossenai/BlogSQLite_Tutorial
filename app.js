@@ -133,13 +133,20 @@ app.post("/login", (req, res) => {
   res.send("Login ainda não implementado.");
 });
 
-app.get("/foradecasa", (req, res) => {
-  // Rota raiz do meu servidor, acesse o browser com o endereço http://localhost:8000
-  // res.send(index);
-  console.log("GET /foradecasa");
-  res.render("foradecasa");
-  //res.redirect("/cadastro"); // Redirecinqa para a ROTA cadastro
+app.get("/dashboard", (req, res) => {
+  console.log("GET /dashboard");
+  // res.send(login);
+  // Rota raiz do meu servidor, acesse o browser com o endereço http://localhost:8000/info
+  res.render("dashboard");
 });
+
+// app.get("/foradecasa", (req, res) => {
+//   // Rota raiz do meu servidor, acesse o browser com o endereço http://localhost:8000
+//   // res.send(index);
+//   console.log("GET /foradecasa");
+//   res.render("foradecasa");
+//   //res.redirect("/cadastro"); // Redirecinqa para a ROTA cadastro
+// });
 
 // app.get("/info", (req, res) => {
 //   res.send(info);
