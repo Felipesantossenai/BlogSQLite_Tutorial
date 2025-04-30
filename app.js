@@ -1,7 +1,7 @@
-//   "biblioteca"
 const express = require("express"); // Importa lib do Express
 const sqlite3 = require("sqlite3"); // Importa lib do sqlite3
 const bodyParser = require("body-parser"); // Importa o body-parser
+const session = require("express-session");
 
 const PORT = 8000; // Irá chamar a Porta TCP do servidor HTTP da aplicação
 
@@ -17,6 +17,15 @@ db.serialize(() => {
     "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT, email TEXT, celular TEXT, cpf TEXT, rg TEXT)"
   );
 });
+
+// Configuração para uso de sessão (cookies) com Express
+app.use(
+  session({
+    secret: "qualquersenha",
+    resave: true,
+    saveUninitialized: true,
+  })
+);
 
 // _dirname é a variável interna do nodejs que guarda o caminho absoluto do projeto, no SO
 //console.log(__dirname + "/static");
@@ -137,7 +146,24 @@ app.get("/login", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  res.send("Login ainda não implementado.");
+  console.log("POST /login");
+  const { username, password } = req.body;
+
+  // Consultar o usuário no banc de dados
+  const query = "SELECT * FROM users WHERE username = ? AND password = ?";
+  db.get(query, [username, password], (err, row) => {
+    if (err) throw err;
+
+    // Se usuário válido -> Registra a sessão e redireciona para o dashboard
+    if (row) {
+      req.session.loggedin = true;
+      req.session.username = username;
+      res.redirect("/dashboard");
+    } // Se não, envia a mensagem de erro (Usuário Inválido)
+    else {
+      res.send("Usuário Inválido");
+    }
+  });
 });
 
 app.get("/dashboard", (req, res) => {
