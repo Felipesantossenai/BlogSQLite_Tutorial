@@ -173,11 +173,17 @@ app.post("/login", (req, res) => {
 });
 
 app.get("/dashboard", (req, res) => {
-  console.log("GET /dashboard");
-  config = { Pagina: "Dashboard", footer: "" };
-  // res.send(login);
-  // Rota raiz do meu servidor, acesse o browser com o endereço http://localhost:8000/info
-  res.render("pages/dashboard", { ...config, req: req });
+  if (req.session.loggedin) {
+    config = { Pagina: "Dashboard", footer: "" };
+    db.all("SELECT * FROM users", [], (err, row) => {
+      if (err) throw err;
+      res.render("pages/dashboard", { ...config, req: req, dados: row });
+    });
+  } else {
+    res.send(
+      'Tentativa de Acesso a uma área restrita, Por favor Faça Login para acessar esta Página. <a href="/">Login</a>'
+    );
+  }
 });
 
 app.get("/logout", (req, res) => {
@@ -187,13 +193,10 @@ app.get("/logout", (req, res) => {
   });
 });
 
-// app.get("/foradecasa", (req, res) => {
-//   // Rota raiz do meu servidor, acesse o browser com o endereço http://localhost:8000
-//   // res.send(index);
-//   console.log("GET /foradecasa");
-//   res.render("foradecasa");
-//   //res.redirect("/cadastro"); // Redirecinqa para a ROTA cadastro
-// });
+app.use("*", (req, res) => {
+  //Envia uma resposta de erro 404
+  res.status(404).render("pages/404", { ...config, req: req });
+});
 
 // app.get("/info", (req, res) => {
 //   res.send(info);
