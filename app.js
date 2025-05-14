@@ -58,9 +58,15 @@ app.get("/", (req, res) => {
   // Rota raiz do meu servidor, acesse o browser com o endereço http://localhost:8000
   console.log("GET /index");
 
-  config = { Pagina: "Blog da turma I2HNA - SESI Nova Odessa", footer: "" };
+  config = {
+    Pagina: "Blog da turma I2HNA - SESI Nova Odessa",
+    footer: "",
+  };
+
   // config.rodape = "1";
-  res.render("pages/index", config);
+  // config = { Pagina: "Blog da turma I2HNA - SESI Nova Odessa", footer: "" };
+  // console.log(`${JSON.stringify({ ...config, req: req })}`)
+  res.render("pages/index", { ...config, req: req });
   // res.render("pages/index",
 });
 
@@ -76,9 +82,9 @@ app.get("/usuarios", (req, res) => {
 // GET do cadastro
 app.get("/cadastro", (req, res) => {
   console.log("GET /cadastro");
-  config = { Pagina: "Págiina de Cadastro", footer: "" };
+  config = { Pagina: "Página de Cadastro", footer: "" };
   // Linha para depurar se está vindo dados no req.body
-  res.render("pages/cadastro", config);
+  res.render("pages/cadastro", { ...config, req: req });
 });
 
 // POST do cadastro
@@ -134,7 +140,7 @@ app.get("/sobre", (req, res) => {
   console.log("GET /sobre");
   config = { Pagina: "Sobre nosso Site", footer: "" };
   // Rota raiz do meu servidor, acesse o browser com o endereço http://localhost:8000/cadastro
-  res.render("pages/sobre", config);
+  res.render("pages/sobre", { ...config, req: req });
 });
 
 app.get("/login", (req, res) => {
@@ -142,7 +148,7 @@ app.get("/login", (req, res) => {
   config = { Pagina: "Página de Login", footer: "" };
   // res.send(login);
   // Rota raiz do meu servidor, acesse o browser com o endereço http://localhost:8000/info
-  res.render("pages/login", config);
+  res.render("pages/login", { ...config, req: req });
 });
 
 app.post("/login", (req, res) => {
@@ -168,9 +174,17 @@ app.post("/login", (req, res) => {
 
 app.get("/dashboard", (req, res) => {
   console.log("GET /dashboard");
+  config = { Pagina: "Dashboard", footer: "" };
   // res.send(login);
   // Rota raiz do meu servidor, acesse o browser com o endereço http://localhost:8000/info
-  res.render("pages/dashboard", config);
+  res.render("pages/dashboard", { ...config, req: req });
+});
+
+app.get("/logout", (req, res) => {
+  // Exemplo de uma rota (END POINT) controlado pela sessão do usuário logado.
+  req.session.destroy(() => {
+    res.redirect("/");
+  });
 });
 
 // app.get("/foradecasa", (req, res) => {
