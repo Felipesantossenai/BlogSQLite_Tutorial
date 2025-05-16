@@ -9,14 +9,21 @@
     </tr>
   </thead>
   <tbody>
-    <% let index=1; dados.forEach(user => { %> 
-    <tr <%- req.session.username==user.username ? `style="color: white; font-style: bold;"` : `` %>>
-    <td><%= user.id %></td>
-    <td><%= user.username %></td>
-    <td><%= user.email %></td>
-    <td><%= user.celular %></td>
-    <td><%= user.password %></td>
+    <% let i; for (i = 0; i < dados.length; i++) { %>
+    <tr
+      class="<%= dados[i].username == req.session.username ? 'destaque' : '' %>"
+    >
+      <th><%= dados[i].id %></th>
+      <th><%= dados[i].username %></th>
+      <th><%= dados[i].email %></th>
+      <th><%= dados[i].celular %></th>
+      <th><%= dados[i].password %></th>
     </tr>
-    <% index++ }); %>
+    <% } %>
+    <tfoot>
+      <tr>
+        <th colspan="5"><%= `Usuários Registrados : ${i}`%></th>
+      </tr>
+    </tfoot>
   </tbody>
 </table>

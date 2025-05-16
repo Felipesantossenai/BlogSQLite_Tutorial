@@ -195,6 +195,7 @@ app.get("/logout", (req, res) => {
 
 app.use("*", (req, res) => {
   //Envia uma resposta de erro 404
+  config = { Pagina: "Error 404", footer: "" };
   res.status(404).render("pages/404", { ...config, req: req });
 });
 
